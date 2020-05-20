@@ -5,7 +5,7 @@ part 'book_model.g.dart';
 class BookModel = _BookModelBase with _$BookModel;
 
 abstract class _BookModelBase with Store {
-   int id;
+  int id;
 
   @observable
   String name;
@@ -13,7 +13,6 @@ abstract class _BookModelBase with Store {
   @action
   setName(String value) => name = value;
 
-  
   @observable
   String author;
   @action
@@ -28,47 +27,55 @@ abstract class _BookModelBase with Store {
   String pagesRead;
   @action
   setPagesRead(String value) => pagesRead = value;
-  
+
   int isFavorite;
 
-
-  String validateName(){
-    if (name == null || name.isEmpty){
+  String validateName() {
+    if (name == null || name.isEmpty) {
       return 'This field is required';
-    } 
+    }
+
     return null;
   }
 
-  String validateAuthor(){
-    if (author == null || author.isEmpty){
+  String validateAuthor() {
+    if (author == null || author.isEmpty) {
       return 'This field is required';
-    } 
+    }
     return null;
   }
 
-  String validatePages(){
-    if (pages == null || pages.isEmpty){
+  String validatePages() {
+    if (pages == null || pages.isEmpty) {
       return 'This field is required';
-    } 
+    }
     return null;
   }
 
-  String validatePagesRead(){
-    if (pagesRead == null || pagesRead.isEmpty){
+  String validatePagesRead() {
+    if (pagesRead == null || pagesRead.isEmpty) {
       return 'This field is required';
-    } 
+    }
     return null;
   }
 
   @computed
-  bool get isFormValid{
-    return validateName() == null && validateAuthor() == null && validatePages() == null && validatePagesRead() == null;
+  bool get isFormValid {
+    return validateName() == null &&
+        validateAuthor() == null &&
+        validatePages() == null &&
+        validatePagesRead() == null;
   }
 
+  _BookModelBase(
+      {this.id,
+      this.name,
+      this.author,
+      this.pages,
+      this.pagesRead,
+      this.isFavorite});
 
-  _BookModelBase({this.name, this.author, this.pages, this.pagesRead, this.isFavorite});
-
-  _BookModelBase.fromMap(Map<String ,dynamic> map){
+  _BookModelBase.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];
     author = map['author'];
@@ -77,14 +84,14 @@ abstract class _BookModelBase with Store {
     pagesRead = map['pagesRead'];
   }
 
-  Map<String, dynamic> toMap(){
-    var map = <String, dynamic> {
-      'id' : id,
-      'name' : name,
-      'author' : author,
-      'isFavorite' : isFavorite,
-      'pages' : pages,
-      'pagesRead' : pagesRead
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{
+      'id': id,
+      'name': name,
+      'author': author,
+      'isFavorite': isFavorite,
+      'pages': pages,
+      'pagesRead': pagesRead
     };
 
     return map;

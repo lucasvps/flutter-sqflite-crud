@@ -78,6 +78,13 @@ class DatabaseHelper {
     return result;
   }
 
+  // Atualizar objeto do banco
+  Future<int> update(BookModel book) async {
+    Database db = await this.database;
+    return await db.update(booksTable, book.toMap(),
+        where: '$colId = ?', whereArgs: [book.id]);
+  }
+
   // Buscar todos os objetos do banco
   Future<List<BookModel>> fetchAllBooks() async {
     Database db = await this.database;

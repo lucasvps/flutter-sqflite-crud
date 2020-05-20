@@ -8,6 +8,7 @@ class AddBookController = _AddBookControllerBase with _$AddBookController;
 abstract class _AddBookControllerBase with Store {
   var book = BookModel();
 
+
   String validateNameController() {
     return book.validateName();
   }

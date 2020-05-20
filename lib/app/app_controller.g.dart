@@ -9,18 +9,18 @@ part of 'app_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AppController on _AppControllerBase, Store {
-  final _$valueAtom = Atom(name: '_AppControllerBase.value');
+  final _$darkStatusAtom = Atom(name: '_AppControllerBase.darkStatus');
 
   @override
-  int get value {
-    _$valueAtom.reportRead();
-    return super.value;
+  bool get darkStatus {
+    _$darkStatusAtom.reportRead();
+    return super.darkStatus;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.reportWrite(value, super.value, () {
-      super.value = value;
+  set darkStatus(bool value) {
+    _$darkStatusAtom.reportWrite(value, super.darkStatus, () {
+      super.darkStatus = value;
     });
   }
 
@@ -28,11 +28,11 @@ mixin _$AppController on _AppControllerBase, Store {
       ActionController(name: '_AppControllerBase');
 
   @override
-  void increment() {
+  dynamic changeTheme() {
     final _$actionInfo = _$_AppControllerBaseActionController.startAction(
-        name: '_AppControllerBase.increment');
+        name: '_AppControllerBase.changeTheme');
     try {
-      return super.increment();
+      return super.changeTheme();
     } finally {
       _$_AppControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -41,7 +41,7 @@ mixin _$AppController on _AppControllerBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+darkStatus: ${darkStatus}
     ''';
   }
 }

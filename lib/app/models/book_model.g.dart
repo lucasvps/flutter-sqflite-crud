@@ -9,6 +9,14 @@ part of 'book_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$BookModel on _BookModelBase, Store {
+  Computed<bool> _$isFormValidComputed;
+
+  @override
+  bool get isFormValid =>
+      (_$isFormValidComputed ??= Computed<bool>(() => super.isFormValid,
+              name: '_BookModelBase.isFormValid'))
+          .value;
+
   final _$nameAtom = Atom(name: '_BookModelBase.name');
 
   @override
@@ -122,7 +130,8 @@ mixin _$BookModel on _BookModelBase, Store {
 name: ${name},
 author: ${author},
 pages: ${pages},
-pagesRead: ${pagesRead}
+pagesRead: ${pagesRead},
+isFormValid: ${isFormValid}
     ''';
   }
 }
