@@ -49,12 +49,23 @@ abstract class _BookModelBase with Store {
     if (pages == null || pages.isEmpty) {
       return 'This field is required';
     }
+    if (int.parse(pages) <= 0){
+      return "Set the number of pages";
+    }
+    
+
     return null;
   }
 
   String validatePagesRead() {
     if (pagesRead == null || pagesRead.isEmpty) {
       return 'This field is required';
+    }
+    if (int.parse(pages) < int.parse(pagesRead)) {
+      return "The book cannot have more pages read than existing ones";
+    }
+    if (int.parse(pagesRead) <= 0){
+      return "Set the number of pages";
     }
     return null;
   }

@@ -42,7 +42,7 @@ class DatabaseHelper {
   // Inicializa o banco
   Future<Database> initializeDatabase() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + 'marvel-api.db';
+    String path = dir.path + 'books-sqflite.db';
     //print(path);
 
     var favoritesDatabase =

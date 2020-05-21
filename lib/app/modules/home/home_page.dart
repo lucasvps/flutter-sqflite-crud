@@ -1,4 +1,5 @@
 import 'package:crud_sqflite/app/app_controller.dart';
+import 'package:crud_sqflite/app/components/widgets.dart';
 import 'package:crud_sqflite/app/db/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -19,6 +20,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   //use 'controller' variable to access controller
 
   DatabaseHelper _db = DatabaseHelper();
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldkey,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
           child: Icon(
@@ -47,7 +50,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             Observer(
               builder: (_) {
                 return Switch(
-                  activeColor: Colors.white,
+                    activeColor: Colors.white,
                     value: Modular.get<AppController>().darkStatus,
                     onChanged: (_) {
                       Modular.get<AppController>().changeTheme();
@@ -93,10 +96,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                             color: Colors.red,
                             icon: Icons.delete,
                             onTap: () {
-                              _db.removeBook(books[index]);
-                              _db.fetchAllBooks().then((list) {
-                                controller.booksList = list;
-                              });
+                              //CustomWidget.showSnackBar('Book successfully deleted', Colors.red, _scaffoldkey);
+                              CustomWidget.alert(
+                                  context,
+                                  'ATTENTION',
+                                  'Do you really wanna delete this book?',
+                                  _scaffoldkey,
+                                  books[index]);
                             },
                           ),
                         ],
