@@ -1,12 +1,11 @@
 import 'package:crud_sqflite/app/app_controller.dart';
 import 'package:crud_sqflite/app/components/widgets.dart';
 import 'package:crud_sqflite/app/db/db_helper.dart';
-import 'package:crud_sqflite/app/models/book_model.dart';
+import 'package:crud_sqflite/app/entities/book_entity.dart';
 import 'package:crud_sqflite/app/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'add_book_controller.dart';
 
 class AddBookPage extends StatefulWidget {
@@ -86,101 +85,109 @@ class _AddBookPageState extends ModularState<AddBookPage, AddBookController> {
           style: TextStyle(fontSize: 20),
         ),
       ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Observer(
-            builder: (_) {
-              return Column(
-                children: <Widget>[
-                  CustomWidget.customTextField(
-                      text: "Book's name",
-                      onChanged: controller.book.setName,
-                      errorText: controller.validateNameController,
-                      initualValue: controller.book.name),
-                  CustomWidget.customTextField(
-                      text: "Author's name",
-                      onChanged: controller.book.setAuthor,
-                      errorText: controller.validateAuthorController,
-                      initualValue: controller.book.author),
-                  CustomWidget.customTextField(
-                      text: "Number of pages",
-                      onChanged: controller.book.setPages,
-                      errorText: controller.validatePagesController,
-                      initualValue: controller.book.pages),
-                  controller.book.pages.isNotEmpty
-                      ? CustomWidget.customTextField(
-                          text: "Number of pages read",
-                          onChanged: controller.book.setPagesRead,
-                          errorText: controller.validatePagesReadController,
-                          initualValue: controller.book.pagesRead)
-                      : Container(),
-                  RaisedButton(
-                      color: Theme.of(context).buttonColor,
-                      onPressed: isEdition && controller.validateForm()
-                          ? () {
-                              BookModel edited = BookModel(
+      body: SingleChildScrollView(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Observer(
+              builder: (_) {
+                return Column(
+                  children: <Widget>[
+                    CustomWidget.customTextField(
+                        text: "Book's name",
+                        onChanged: controller.book.setName,
+                        errorText: controller.validateNameController,
+                        initualValue: controller.book.name),
+                    CustomWidget.customTextField(
+                        text: "Author's name",
+                        onChanged: controller.book.setAuthor,
+                        errorText: controller.validateAuthorController,
+                        initualValue: controller.book.author),
+                    CustomWidget.customTextField(
+                        text: "Number of pages",
+                        onChanged: controller.book.setPages,
+                        errorText: controller.validatePagesController,
+                        initualValue: controller.book.pages),
+                    controller.book.pages.isNotEmpty
+                        ? CustomWidget.customTextField(
+                            text: "Number of pages read",
+                            onChanged: controller.book.setPagesRead,
+                            errorText: controller.validatePagesReadController,
+                            initualValue: controller.book.pagesRead)
+                        : Container(),
+                    RaisedButton(
+                        color: Theme.of(context).buttonColor,
+                        onPressed: isEdition && controller.validateForm()
+                            ? () {
+                                BookEntity edited = BookEntity(
                                   id: int.parse(idEdition),
                                   name: controller.book.name,
                                   author: controller.book.author,
                                   pages: controller.book.pages,
                                   pagesRead: controller.book.pagesRead,
-                                  isFavorite: 0);
+                                );
 
-                              _db.update(edited);
-                              CustomWidget.showSnackBar(
-                                  isEdition
-                                      ? "Book successfully edited"
-                                      : 'Book successfully added',
-                                  Colors.green,
-                                  _scaffoldkey);
-                              Future.delayed(Duration(seconds: 2))
-                                  .then((value) {
-                                _db.fetchAllBooks().then((list) {
-                                  Modular.get<HomeController>().booksList =
-                                      list;
-                                  Modular.to.pushNamedAndRemoveUntil(
-                                      '/', ModalRoute.withName('/'));
+                                Modular.get<AppController>()
+                                    .db
+                                    .bookRepositoryDAO
+                                    .updateItem(edited);
+                                CustomWidget.showSnackBar(
+                                    isEdition
+                                        ? "Book successfully edited"
+                                        : 'Book successfully added',
+                                    Colors.green,
+                                    _scaffoldkey);
+                                Future.delayed(Duration(seconds: 2))
+                                    .then((value) {
+                                  _db.fetchAllBooks().then((list) {
+                                    Modular.get<HomeController>().booksList =
+                                        list;
+                                    Modular.to.pushNamedAndRemoveUntil(
+                                        '/', ModalRoute.withName('/'));
+                                  });
                                 });
-                              });
-                            }
-                          : controller.validateForm()
-                              ? () {
-                                  BookModel book = BookModel(
+                              }
+                            : controller.validateForm()
+                                ? () {
+                                    BookEntity book = BookEntity(
                                       name: controller.book.name,
                                       author: controller.book.author,
                                       pages: controller.book.pages,
                                       pagesRead: controller.book.pagesRead,
-                                      isFavorite: 0);
+                                    );
 
-                                  _db.newBook(book);
-                                  CustomWidget.showSnackBar(
-                                      isEdition
-                                          ? "Book successfully edited"
-                                          : 'Book successfully added',
-                                      Colors.green,
-                                      _scaffoldkey);
-                                  Future.delayed(Duration(seconds: 2))
-                                      .then((value) {
-                                    _db.fetchAllBooks().then((list) {
-                                      Modular.get<HomeController>().booksList =
-                                          list;
-                                      Modular.to.pushNamedAndRemoveUntil(
-                                          '/', ModalRoute.withName('/'));
+                                    Modular.get<AppController>()
+                                        .db
+                                        .bookRepositoryDAO
+                                        .insertItem(book);
+                                    CustomWidget.showSnackBar(
+                                        isEdition
+                                            ? "Book successfully edited"
+                                            : 'Book successfully added',
+                                        Colors.green,
+                                        _scaffoldkey);
+                                    Future.delayed(Duration(seconds: 2))
+                                        .then((value) {
+                                      _db.fetchAllBooks().then((list) {
+                                        Modular.get<HomeController>()
+                                            .booksList = list;
+                                        Modular.to.pushNamedAndRemoveUntil(
+                                            '/', ModalRoute.withName('/'));
+                                      });
                                     });
-                                  });
-                                }
-                              : null,
-                      child: Text(
-                        'Confirm',
-                        style: TextStyle(
-                            color: Modular.get<AppController>().darkStatus
-                                ? Colors.black
-                                : Colors.white),
-                      )),
-                ],
-              );
-            },
+                                  }
+                                : null,
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(
+                              color: Modular.get<AppController>().darkStatus
+                                  ? Colors.black
+                                  : Colors.white),
+                        )),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

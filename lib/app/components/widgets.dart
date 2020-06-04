@@ -1,3 +1,4 @@
+import 'package:crud_sqflite/app/app_controller.dart';
 import 'package:crud_sqflite/app/db/db_helper.dart';
 import 'package:crud_sqflite/app/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
@@ -48,13 +49,11 @@ class CustomWidget {
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
-                    var _db = DatabaseHelper();
-                    _db.removeBook(deletedBook);
-                    _db.fetchAllBooks().then((list) {
-                      Modular.get<HomeController>().booksList = list;
-                    });
+                    Modular.get<AppController>().db.bookRepositoryDAO.deleteItem(deletedBook);
+                    
                     showSnackBar('Book successfully deleted', Colors.red, key);
-                    Navigator.of(context).pop();
+                    //Navigator.of(context).pop();
+                    Modular.to.pushReplacementNamed('/');
                   },
                   child: Text("Delete")),
               FlatButton(
