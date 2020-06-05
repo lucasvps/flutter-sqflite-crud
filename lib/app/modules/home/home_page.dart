@@ -22,14 +22,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   DatabaseHelper _db = DatabaseHelper();
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
-
+  var appController = Modular.get<AppController>();
+  
   @override
   void initState() {
     super.initState();
-    // _db.fetchAllBooks().then((list) {
-    //   controller.booksList = list;
-    // });
-    controller.floorDatabase.bookRepositoryDAO.getAllBooks().then((list) {
+    
+    appController.db.bookRepositoryDAO.getAllBooks().then((list) {
       controller.bookListEntity = list;
     });
     //print(controller.booksList.length);
@@ -57,7 +56,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     activeColor: Colors.white,
                     value: Modular.get<AppController>().darkStatus,
                     onChanged: (_) {
-                      Modular.get<AppController>().changeTheme();
+                      Modular.get<AppController>().changeDarkStatus();
                     });
               },
             )
@@ -75,7 +74,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             builder: (_) {
               return FutureBuilder(
                 future:
-                    controller.floorDatabase.bookRepositoryDAO.getAllBooks(),
+                    appController.db.bookRepositoryDAO.getAllBooks(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(

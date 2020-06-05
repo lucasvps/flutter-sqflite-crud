@@ -1,6 +1,4 @@
 import 'package:crud_sqflite/app/app_controller.dart';
-import 'package:crud_sqflite/app/db/db_helper.dart';
-import 'package:crud_sqflite/app/modules/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

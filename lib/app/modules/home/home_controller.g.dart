@@ -24,10 +24,26 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$bookListEntityAtom = Atom(name: '_HomeControllerBase.bookListEntity');
+
+  @override
+  List<BookEntity> get bookListEntity {
+    _$bookListEntityAtom.reportRead();
+    return super.bookListEntity;
+  }
+
+  @override
+  set bookListEntity(List<BookEntity> value) {
+    _$bookListEntityAtom.reportWrite(value, super.bookListEntity, () {
+      super.bookListEntity = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-booksList: ${booksList}
+booksList: ${booksList},
+bookListEntity: ${bookListEntity}
     ''';
   }
 }
